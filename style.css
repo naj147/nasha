@@ -54,7 +54,7 @@ body {
     padding: 10px;
     height: 40vh;
     width: 40vh;
-    background-image: url("assets/logo.gif");
+    background-image: url("./assets/logo.gif");
     border-radius: 50%;
     background-size: cover;
     background-repeat: no-repeat;
