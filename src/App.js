@@ -1,10 +1,10 @@
-import * as THREE from 'three'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Image, Environment, ScrollControls, useScroll, useTexture } from '@react-three/drei'
+import { Environment, ScrollControls, useScroll, useTexture } from '@react-three/drei'
 import { easing } from 'maath'
+import { Banner } from './components/vibyBanner.js'
 import './components/util'
-import 
+import MiddleImage from './components/MiddleImage.js'
 
 const App = () => (
   <Canvas camera={{ position: [0, 0, 100], fov: 15 }}>
@@ -31,57 +31,7 @@ function Rig(props) {
   return <group ref={ref} {...props} />
 }
 
-function Carousel({ radius = 1.4, count = 8 }) {
-  return Array.from({ length: count }, (_, i) => (
-    <Card
-      key={i}
-      url={`/img${Math.floor(i % 10) + 1}_.jpg`}
-      position={[Math.sin((i / count) * Math.PI * 2) * radius, 0, Math.cos((i / count) * Math.PI * 2) * radius]}
-      rotation={[0, Math.PI + (i / count) * Math.PI * 2, 0]}
-    />
-  ))
-}
 
-function MiddleImage() {
-  return (
-    <Image  url={`/logo.gif`} transparent side={THREE.DoubleSide} >
-      <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
-    </Image>
-  )
-}
 
-function Card({ url, ...props }) {
-  const ref = useRef()
-  const [hovered, hover] = useState(false)
-  const pointerOver = (e) => (e.stopPropagation(), hover(true))
-  const pointerOut = () => hover(false)
-  useFrame((state, delta) => {
-    easing.damp3(ref.current.scale, hovered ? 1.15 : 1, 0.1, delta)
-    easing.damp(ref.current.material, 'radius', hovered ? 0.25 : 0.1, 0.2, delta)
-    easing.damp(ref.current.material, 'zoom', hovered ? 1 : 1.5, 0.2, delta)
-  })
-  return (
-    <Image ref={ref} url={url} transparent side={THREE.DoubleSide} onPointerOver={pointerOver} onPointerOut={pointerOut} {...props}>
-      <bentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
-    </Image>
-  )
-}
-
-function Banner(props) {
-  const ref = useRef()
-  const texture = useTexture('/logo_text.png')
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-  const scroll = useScroll()
-  useFrame((state, delta) => {
-    ref.current.material.time.value += Math.abs(scroll.delta) * 4
-    ref.current.material.map.offset.x += delta / 2
-  })
-  return (
-    <mesh ref={ref} {...props}>
-      <cylinderGeometry args={[1.6, 1.6, 0.2, 128, 16, true]} />
-      <meshSineMaterial map={texture} map-anisotropy={16} map-repeat={[40, 1]} side={THREE.DoubleSide} toneMapped={true} />
-    </mesh>
-  )
-}
 
 export default App

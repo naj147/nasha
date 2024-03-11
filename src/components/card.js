@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { easing } from 'maath'
+import { Image } from '@react-three/drei'
 import './util'
 
 export default function Card({ url, ...props }) {
